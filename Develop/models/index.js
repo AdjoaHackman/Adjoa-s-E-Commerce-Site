@@ -14,6 +14,7 @@ Category.hasMany(Product);
 Product.belongstoMany(Tag, {through: 'ProductTag'});
 // Tags belongToMany Products (through ProductTag)
 Tag.belongstoMany(Product, {through: 'Tag'});
+// similar to sql syntax - referenced by 
 
 module.exports = {
   Product,
