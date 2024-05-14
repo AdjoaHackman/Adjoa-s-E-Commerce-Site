@@ -7,7 +7,14 @@ router.get('/', async (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   try {
-    const TagData = await {Tag, Product, ProductTag}.findAll();
+    const TagData = await Tag.findAll({
+      include: [
+        {
+          model: Product,
+          through: ProductTag
+        }
+      ]
+    });
     res.status(200).json(TagData);
   } catch (err) {
     res.status(500).json(err);
@@ -18,7 +25,14 @@ router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   try {
-    const TagData = await {Tag, Product, ProductTag}.findByPk(req.params.id);
+    const TagData = await Tag.findByPk(req.params.id,{
+      include: [
+        {
+          model: Product,
+          through: ProductTag
+        }
+      ]
+    });
     if (!TagData) {
       res.status(404).json({ message: 'No tag with this id!' });
       return;
@@ -32,7 +46,14 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new tag
   try {
-    const TagData = await {Tag, Product, ProductTag}.create(req.body);
+    const TagData = await Tag.create(req.body, {
+      include: [
+        {
+          model: Product,
+          through: ProductTag
+        }
+      ]
+    });
     res.status(200).json(TagData);
   } catch (err) {
     res.status(500).json(err);
@@ -42,7 +63,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // update a tag's name by its `id` value
   try {
-    const TagData = await {Tag, Product, ProductTag}.update(req.body, {
+    const TagData = await Tag.update(req.body, {
+      include: [
+        {
+          model: Product,
+          through: ProductTag
+        }
+      ],     
       where: {
         id: req.params.id,
       },
@@ -60,7 +87,13 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   // delete on tag by its `id` value
   try {
-    const TagData = await {Tag, Product, ProductTag}.destroy({
+    const TagData = await Tag.destroy({
+      include: [
+        {
+          model: Product,
+          through: ProductTag
+        }
+      ],
       where: {
         id: req.params.id,
       },
